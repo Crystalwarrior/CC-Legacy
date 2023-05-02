@@ -1,5 +1,7 @@
 extends Area2D
 
+signal interact_tracked(user)
+signal interact_untracked(user)
 signal interact(user)
 
 remote func update_object_state(peer=null):
@@ -16,3 +18,9 @@ remote func interact_object():
 func _on_interact(user):
 	pass
 #	update_door_state(not open)
+
+func _on_interact_tracked(user):
+	pass
+
+func _on_interact_untracked(user):
+	pass
