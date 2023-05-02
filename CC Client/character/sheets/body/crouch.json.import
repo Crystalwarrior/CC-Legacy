@@ -1,0 +1,16 @@
+[remap]
+
+importer="eska.aseprite_importer"
+type="PackedScene"
+path="res://.import/crouch.json-706b51a605ac9635aafcdf38641be470.scn"
+
+[deps]
+
+source_file="res://character/sheets/body/crouch.json"
+dest_files=[ "res://.import/crouch.json-706b51a605ac9635aafcdf38641be470.scn" ]
+
+[params]
+
+sheet_image=""
+post_script=""
+autoplay_animation=""

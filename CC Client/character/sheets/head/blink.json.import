@@ -1,0 +1,16 @@
+[remap]
+
+importer="eska.aseprite_importer"
+type="PackedScene"
+path="res://.import/blink.json-1044e7c005efe49bff8f3ab2806532aa.scn"
+
+[deps]
+
+source_file="res://character/sheets/head/blink.json"
+dest_files=[ "res://.import/blink.json-1044e7c005efe49bff8f3ab2806532aa.scn" ]
+
+[params]
+
+sheet_image=""
+post_script=""
+autoplay_animation=""

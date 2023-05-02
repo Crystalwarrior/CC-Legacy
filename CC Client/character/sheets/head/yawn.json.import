@@ -1,0 +1,16 @@
+[remap]
+
+importer="eska.aseprite_importer"
+type="PackedScene"
+path="res://.import/yawn.json-066e4fd8e1a15640313d674f2894791c.scn"
+
+[deps]
+
+source_file="res://character/sheets/head/yawn.json"
+dest_files=[ "res://.import/yawn.json-066e4fd8e1a15640313d674f2894791c.scn" ]
+
+[params]
+
+sheet_image=""
+post_script=""
+autoplay_animation=""

@@ -1,0 +1,16 @@
+[remap]
+
+importer="eska.aseprite_importer"
+type="PackedScene"
+path="res://.import/john.json-8d508f08d21c07b2a7f4e8de33a2ba82.scn"
+
+[deps]
+
+source_file="res://character/sheets/hair/john.json"
+dest_files=[ "res://.import/john.json-8d508f08d21c07b2a7f4e8de33a2ba82.scn" ]
+
+[params]
+
+sheet_image=""
+post_script=""
+autoplay_animation=""

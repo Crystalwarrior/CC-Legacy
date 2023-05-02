@@ -1,0 +1,193 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://interface/Menu.gd" type="Script" id=1]
+[ext_resource path="res://interface/CustomizationScreen.tscn" type="PackedScene" id=2]
+
+[node name="Menu" type="Control"]
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Main" type="VBoxContainer" parent="."]
+margin_top = 100.0
+margin_right = 512.0
+margin_bottom = 400.0
+
+[node name="Title" type="Label" parent="Main"]
+margin_right = 512.0
+margin_bottom = 14.0
+text = "Crimson Carnage Prototype"
+align = 1
+
+[node name="Buttons" type="HBoxContainer" parent="Main"]
+margin_top = 18.0
+margin_right = 512.0
+margin_bottom = 38.0
+alignment = 1
+
+[node name="Join" type="Button" parent="Main/Buttons"]
+margin_right = 512.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Join"
+
+[node name="Host" type="Button" parent="Main/Buttons"]
+visible = false
+margin_left = 258.0
+margin_right = 512.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Host"
+
+[node name="Join" type="VBoxContainer" parent="."]
+editor/display_folded = true
+visible = false
+margin_top = 150.0
+margin_right = 512.0
+margin_bottom = 450.0
+
+[node name="Title" type="Label" parent="Join"]
+margin_right = 512.0
+margin_bottom = 14.0
+text = "Join Game"
+align = 1
+
+[node name="Name" type="HBoxContainer" parent="Join"]
+margin_top = 18.0
+margin_right = 512.0
+margin_bottom = 42.0
+alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="Join/Name"]
+margin_left = 145.0
+margin_right = 366.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 221, 0 )
+max_length = 64
+placeholder_text = "Enter your name here"
+
+[node name="Join" type="HBoxContainer" parent="Join"]
+margin_top = 46.0
+margin_right = 512.0
+margin_bottom = 70.0
+alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="Join/Join"]
+margin_left = 58.0
+margin_right = 414.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 356, 0 )
+max_length = 24
+placeholder_text = "127.0.0.1:25565"
+
+[node name="Join" type="Button" parent="Join/Join"]
+margin_left = 418.0
+margin_right = 453.0
+margin_bottom = 24.0
+text = "Join"
+
+[node name="Label" type="Label" parent="Join"]
+margin_top = 74.0
+margin_right = 512.0
+margin_bottom = 88.0
+text = "Please enter the IP address in <ipv4>:<port> format"
+align = 1
+
+[node name="Back" type="Button" parent="Join"]
+margin_left = 235.0
+margin_top = 92.0
+margin_right = 277.0
+margin_bottom = 112.0
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "Back"
+
+[node name="Host" type="VBoxContainer" parent="."]
+editor/display_folded = true
+visible = false
+margin_top = 150.0
+margin_right = 512.0
+margin_bottom = 450.0
+
+[node name="Title" type="Label" parent="Host"]
+margin_right = 512.0
+margin_bottom = 14.0
+text = "Host Game"
+align = 1
+
+[node name="Name" type="HBoxContainer" parent="Host"]
+margin_top = 18.0
+margin_right = 512.0
+margin_bottom = 42.0
+alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="Host/Name"]
+margin_left = 145.0
+margin_right = 366.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 221, 0 )
+max_length = 64
+placeholder_text = "Enter your name here"
+
+[node name="Host" type="HBoxContainer" parent="Host"]
+margin_top = 46.0
+margin_right = 512.0
+margin_bottom = 70.0
+alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="Host/Host"]
+margin_left = 170.0
+margin_right = 296.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 126, 0 )
+max_length = 6
+placeholder_text = "25565"
+
+[node name="Host" type="Button" parent="Host/Host"]
+margin_left = 300.0
+margin_right = 342.0
+margin_bottom = 24.0
+text = "Host"
+
+[node name="Label" type="Label" parent="Host"]
+margin_top = 74.0
+margin_right = 512.0
+margin_bottom = 88.0
+text = "Please enter the port you wish to host on"
+align = 1
+
+[node name="Back" type="Button" parent="Host"]
+margin_left = 235.0
+margin_top = 92.0
+margin_right = 277.0
+margin_bottom = 112.0
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "Back"
+
+[node name="CustomizationScreen" parent="." instance=ExtResource( 2 )]
+visible = false
+
+[node name="Button" type="Button" parent="."]
+margin_left = 220.0
+margin_top = 460.0
+margin_right = 285.0
+margin_bottom = 480.0
+text = "Charedit"
+
+[connection signal="pressed" from="Main/Buttons/Join" to="." method="_on_Join_pressed"]
+[connection signal="pressed" from="Main/Buttons/Host" to="." method="_on_Host_pressed"]
+[connection signal="text_changed" from="Join/Name/LineEdit" to="." method="_on_Name_text_changed"]
+[connection signal="text_changed" from="Join/Join/LineEdit" to="." method="_on_JoinIP_text_changed"]
+[connection signal="pressed" from="Join/Join/Join" to="." method="_on_JoinButton_pressed"]
+[connection signal="pressed" from="Join/Back" to="." method="_on_Back_pressed"]
+[connection signal="text_changed" from="Host/Name/LineEdit" to="." method="_on_Name_text_changed"]
+[connection signal="text_changed" from="Host/Host/LineEdit" to="." method="_on_Port_text_changed"]
+[connection signal="pressed" from="Host/Host/Host" to="." method="_on_HostButton_pressed"]
+[connection signal="pressed" from="Host/Back" to="." method="_on_Back_pressed"]
+[connection signal="pressed" from="Button" to="CustomizationScreen" method="_on_Charedit_pressed"]

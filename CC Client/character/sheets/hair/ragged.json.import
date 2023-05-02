@@ -1,0 +1,16 @@
+[remap]
+
+importer="eska.aseprite_importer"
+type="PackedScene"
+path="res://.import/ragged.json-ef0a40c66d733001043673da7ee62815.scn"
+
+[deps]
+
+source_file="res://character/sheets/hair/ragged.json"
+dest_files=[ "res://.import/ragged.json-ef0a40c66d733001043673da7ee62815.scn" ]
+
+[params]
+
+sheet_image=""
+post_script=""
+autoplay_animation=""

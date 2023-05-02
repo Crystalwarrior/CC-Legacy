@@ -1,0 +1,16 @@
+[remap]
+
+importer="eska.aseprite_importer"
+type="PackedScene"
+path="res://.import/looseponytail.json-79a976a150f0565b4265740e39536204.scn"
+
+[deps]
+
+source_file="res://character/sheets/hair/looseponytail.json"
+dest_files=[ "res://.import/looseponytail.json-79a976a150f0565b4265740e39536204.scn" ]
+
+[params]
+
+sheet_image=""
+post_script=""
+autoplay_animation=""

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/concrete-03.wav-805ce8318b4669d69f2cdd70496dcfbe.sample"
+
+[deps]
+
+source_file="res://sounds/footsteps/concrete-03.wav"
+dest_files=[ "res://.import/concrete-03.wav-805ce8318b4669d69f2cdd70496dcfbe.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0

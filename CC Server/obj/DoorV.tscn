@@ -1,0 +1,73 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://obj/Door.gd" type="Script" id=1]
+[ext_resource path="res://obj/door.png" type="Texture" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+custom_solver_bias = 0.0
+extents = Vector2( 16, 4 )
+
+[sub_resource type="OccluderPolygon2D" id=2]
+
+closed = false
+cull_mode = 0
+polygon = PoolVector2Array( -16, -16, 16, -16 )
+
+[node name="Door" type="Area2D" index="0" groups=[
+"interactable",
+"networked",
+]]
+
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+script = ExtResource( 1 )
+_sections_unfolded = [ "Collision" ]
+
+[node name="Sprite" type="Sprite" parent="." index="0"]
+
+position = Vector2( 0, -16 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 16, 0, 32, 32 )
+_sections_unfolded = [ "Region", "Transform", "Visibility" ]
+
+[node name="Interact" type="CollisionShape2D" parent="." index="1"]
+
+position = Vector2( 0, -4 )
+shape = SubResource( 1 )
+
+[node name="DoorBody" type="StaticBody2D" parent="." index="2"]
+
+position = Vector2( 0, -16 )
+input_pickable = false
+collision_layer = 1
+collision_mask = 1
+constant_linear_velocity = Vector2( 0, 0 )
+constant_angular_velocity = 0.0
+friction = 1.0
+bounce = 0.0
+_sections_unfolded = [ "Transform" ]
+
+[node name="Occluder" type="LightOccluder2D" parent="DoorBody" index="0"]
+
+occluder = SubResource( 2 )
+light_mask = 1
+
+[node name="Collision" type="CollisionShape2D" parent="DoorBody" index="1"]
+
+position = Vector2( 0, 12 )
+shape = SubResource( 1 )
+
+[connection signal="interact" from="." to="." method="_on_interact"]
+
+[connection signal="interact_tracked" from="." to="." method="_on_interact_tracked"]
+
+[connection signal="interact_untracked" from="." to="." method="_on_interact_untracked"]
+
+

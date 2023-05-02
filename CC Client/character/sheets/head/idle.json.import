@@ -1,0 +1,16 @@
+[remap]
+
+importer="eska.aseprite_importer"
+type="PackedScene"
+path="res://.import/idle.json-8a6c8d8c00b1c824d50b3ae603e8c173.scn"
+
+[deps]
+
+source_file="res://character/sheets/head/idle.json"
+dest_files=[ "res://.import/idle.json-8a6c8d8c00b1c824d50b3ae603e8c173.scn" ]
+
+[params]
+
+sheet_image=""
+post_script=""
+autoplay_animation=""
