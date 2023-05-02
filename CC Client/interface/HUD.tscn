@@ -73,17 +73,5 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="inventory" type="ItemList" parent="."]
-visible = false
-light_mask = 0
-margin_left = 96.0
-margin_top = 400.0
-margin_right = 416.0
-margin_bottom = 440.0
-rect_clip_content = false
-max_columns = 8
-same_column_width = true
-fixed_column_width = 40
-
 [connection signal="pressed" from="chat/send" to="." method="_on_chat_send_pressed"]
 [connection signal="text_entered" from="chat/input" to="." method="_on_chat_text_entered"]
