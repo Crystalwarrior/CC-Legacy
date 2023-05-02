@@ -50,6 +50,8 @@ const whitelist_properties = [
 	"infinite",
 	"margin",
 	"name",
+	"offsetx",
+	"offsety",
 	"orientation",
 	"probability",
 	"spacing",
@@ -61,6 +63,7 @@ const whitelist_properties = [
 	"version",
 	"visible",
 	"width",
+	"custom_material"
 ]
 
 # All templates loaded, can be looked up by path name
@@ -211,6 +214,11 @@ func make_layer(layer, parent, root, data):
 	var opacity = float(layer.opacity) if "opacity" in layer else 1.0
 	var visible = bool(layer.visible) if "visible" in layer else true
 
+	var z_index = 0
+
+	if "properties" in layer and "z_index" in layer.properties:
+		z_index = layer.properties.z_index
+
 	if layer.type == "tilelayer":
 		var layer_size = Vector2(int(layer.width), int(layer.height))
 		var tilemap = TileMap.new()
@@ -220,10 +228,11 @@ func make_layer(layer, parent, root, data):
 		tilemap.visible = visible
 		tilemap.mode = map_mode
 		tilemap.cell_half_offset = map_offset
+		tilemap.format = 1
 		tilemap.cell_clip_uv = options.uv_clip
 		tilemap.cell_y_sort = true
-		tilemap.cell_tile_origin = TileMap.TILE_ORIGIN_BOTTOM_LEFT
 		tilemap.collision_layer = options.collision_layer
+		tilemap.z_index = z_index
 
 		var offset = Vector2()
 		if "offsetx" in layer:
@@ -311,6 +320,7 @@ func make_layer(layer, parent, root, data):
 		sprite.texture = image
 		sprite.visible = visible
 		sprite.modulate = Color(1.0, 1.0, 1.0, opacity)
+		sprite.z_index = z_index
 		if options.save_tiled_properties:
 			set_tiled_properties_as_meta(sprite, layer)
 		if options.custom_properties:
@@ -328,6 +338,7 @@ func make_layer(layer, parent, root, data):
 			set_custom_properties(object_layer, layer)
 		object_layer.modulate = Color(1.0, 1.0, 1.0, opacity)
 		object_layer.visible = visible
+		object_layer.z_index = z_index
 		object_layer.set("editor/display_folded", true)
 		parent.add_child(object_layer)
 		object_layer.set_owner(root)
@@ -485,7 +496,7 @@ func make_layer(layer, parent, root, data):
 
 				var is_tile_object = tileset.tile_get_region(tile_id).get_area() == 0
 				var collisions = tileset.tile_get_shape_count(tile_id)
-				var has_collisions = collisions > 0 && object.type != "sprite"
+				var has_collisions = collisions > 0 && object.has("type") && object.type != "sprite"
 				var sprite = Sprite.new()
 				var pos = Vector2()
 				var rot = 0
@@ -582,6 +593,7 @@ func make_layer(layer, parent, root, data):
 		group.modulate = Color(1.0, 1.0, 1.0, opacity)
 		group.visible = visible
 		group.position = pos
+		group.z_index = z_index
 
 		if options.save_tiled_properties:
 			set_tiled_properties_as_meta(group, layer)
@@ -613,6 +625,8 @@ func set_default_obj_params(object):
 		object.type = ""
 	if not "visible" in object:
 		object.visible = true
+
+var flags
 
 # Makes a tileset from a array of tilesets data
 # Since Godot supports only one TileSet per TileMap, all tilesets from Tiled are combined
@@ -680,7 +694,13 @@ func build_tileset_for_scene(tilesets, source_path, options):
 			imagesize = Vector2(int(ts.imagewidth), int(ts.imageheight))
 
 		var tilesize = Vector2(int(ts.tilewidth), int(ts.tileheight))
-		var tilecount = int(ts.tilecount)
+
+		var tilecount
+		if not "tilecount" in ts:
+			tilecount = make_tilecount(tilesize, imagesize, margin, spacing)
+		else:
+			tilecount = int(ts.tilecount)
+
 
 		var gid = firstgid
 
@@ -689,31 +709,79 @@ func build_tileset_for_scene(tilesets, source_path, options):
 
 		var i = 0
 		var column = 0
+
+
+		# Needed to look up textures for animations
+		var tileRegions = []
 		while i < tilecount:
 			var tilepos = Vector2(x, y)
 			var region = Rect2(tilepos, tilesize)
+
+			tileRegions.push_back(region)
+
+			column += 1
+			i += 1
+
+			x += int(tilesize.x) + spacing
+			if (columns > 0 and column >= columns) or x >= int(imagesize.x) - margin or (x + int(tilesize.x)) > int(imagesize.x):
+				x = margin
+				y += int(tilesize.y) + spacing
+				column = 0
+
+		i = 0
+
+		while i < tilecount:
+			var region = tileRegions[i]
 
 			var rel_id = str(gid - firstgid)
 
 			result.create_tile(gid)
 
 			if has_global_image:
-				result.tile_set_texture(gid, image)
-				result.tile_set_region(gid, region)
-				if options.apply_offset:
-					result.tile_set_texture_offset(gid, Vector2(0, -tilesize.y))
+				if rel_id in ts.tiles && "animation" in ts.tiles[rel_id]:
+					var animated_tex = AnimatedTexture.new()
+					animated_tex.frames = ts.tiles[rel_id].animation.size()
+					animated_tex.fps = 0
+					var c = 0
+					# Animated texture wants us to have seperate textures for each frame
+					# so we have to pull them out of the tileset
+					var tilesetTexture = image.get_data()
+					for g in ts.tiles[rel_id].animation:
+						var frameTex = tilesetTexture.get_rect(tileRegions[(int(g.tileid))])
+						var newTex = ImageTexture.new()
+						newTex.create_from_image(frameTex, flags)
+						animated_tex.set_frame_texture(c, newTex)
+						animated_tex.set_frame_delay(c, float(g.duration) * 0.001)
+						c += 1
+					result.tile_set_texture(gid, animated_tex)
+					result.tile_set_region(gid, Rect2(Vector2(0, 0), tilesize))
+				else:
+					result.tile_set_texture(gid, image)
+					result.tile_set_region(gid, region)
 			elif not rel_id in ts.tiles:
 				gid += 1
 				continue
 			else:
-				var image_path = ts.tiles[rel_id].image
-				image = load_image(image_path, ts_source_path, options)
-				if typeof(image) != TYPE_OBJECT:
-					# Error happened
-					return image
-				result.tile_set_texture(gid, image)
-				if options.apply_offset:
-					result.tile_set_texture_offset(gid, Vector2(0, -image.get_height()))
+				if rel_id in ts.tiles && "animation" in ts.tiles[rel_id]:
+					var animated_tex = AnimatedTexture.new()
+					animated_tex.frames = ts.tiles[rel_id].animation.size()
+					animated_tex.fps = 0
+					var c = 0
+					#untested
+					var image_path = ts.tiles[rel_id].image
+					for g in ts.tiles[rel_id].animation:
+						animated_tex.set_frame_texture(c, load_image(image_path, ts_source_path, options))
+						animated_tex.set_frame_delay(c, float(g.duration) * 0.001)
+						c += 1
+					result.tile_set_texture(gid, animated_tex)
+					result.tile_set_region(gid, Rect2(Vector2(0, 0), tilesize))
+				else:
+					var image_path = ts.tiles[rel_id].image
+					image = load_image(image_path, ts_source_path, options)
+					if typeof(image) != TYPE_OBJECT:
+						# Error happened
+						return image
+					result.tile_set_texture(gid, image)
 
 			if "tiles" in ts and rel_id in ts.tiles and "objectgroup" in ts.tiles[rel_id] \
 					and "objects" in ts.tiles[rel_id].objectgroup:
@@ -726,8 +794,6 @@ func build_tileset_for_scene(tilesets, source_path, options):
 						return shape
 
 					var offset = Vector2(float(object.x), float(object.y))
-					if options.apply_offset:
-						offset += result.tile_get_texture_offset(gid)
 					if "width" in object and "height" in object:
 						offset += Vector2(float(object.width) / 2, float(object.height) / 2)
 
@@ -740,6 +806,9 @@ func build_tileset_for_scene(tilesets, source_path, options):
 					else:
 						result.tile_add_shape(gid, shape, Transform2D(0, offset), object.type == "one-way")
 
+			if "properties" in ts and "custom_material" in ts.properties:
+				result.tile_set_material(gid, load(ts.properties.custom_material))
+
 			if options.custom_properties and options.tile_metadata and "tileproperties" in ts \
 					and "tilepropertytypes" in ts and rel_id in ts.tileproperties and rel_id in ts.tilepropertytypes:
 				tile_meta[gid] = get_custom_properties(ts.tileproperties[rel_id], ts.tilepropertytypes[rel_id])
@@ -749,14 +818,13 @@ func build_tileset_for_scene(tilesets, source_path, options):
 						if not gid in tile_meta: tile_meta[gid] = {}
 						tile_meta[gid][property] = ts.tiles[rel_id][property]
 
+					# If tile has a custom property called 'name', set the tile's name
+					if property == "name":
+						result.tile_set_name(gid, ts.tiles[rel_id].properties.name)
+
+
 			gid += 1
-			column += 1
 			i += 1
-			x += int(tilesize.x) + spacing
-			if (columns > 0 and column >= columns) or x >= int(imagesize.x) - margin or (x + int(tilesize.x)) > int(imagesize.x):
-				x = margin
-				y += int(tilesize.y) + spacing
-				column = 0
 
 		if str(ts.name) != "":
 			result.resource_name = str(ts.name)
@@ -765,7 +833,7 @@ func build_tileset_for_scene(tilesets, source_path, options):
 			set_tiled_properties_as_meta(result, ts)
 		if options.custom_properties:
 			if "properties" in ts and "propertytypes" in ts:
-				set_custom_properties(result, ts.properties, ts.propertytypes)
+				set_custom_properties(result, ts)
 
 	if options.custom_properties and options.tile_metadata:
 		result.set_meta("tile_meta", tile_meta)
@@ -789,7 +857,7 @@ func build_tileset(source_path, options):
 # Loads an image from a given path
 # Returns a Texture
 func load_image(rel_path, source_path, options):
-	var flags = options.image_flags if "image_flags" in options else Texture.FLAGS_DEFAULT
+	flags = options.image_flags if "image_flags" in options else Texture.FLAGS_DEFAULT
 	var embed = options.embed_internal_images if "embed_internal_images" in options else false
 
 	var ext = rel_path.get_extension().to_lower()
@@ -813,13 +881,14 @@ func load_image(rel_path, source_path, options):
 
 	var image = null
 	if embed:
+		var img = Image.new()
+		img.load(total_path)
 		image = ImageTexture.new()
-		image.load(total_path)
+		image.create_from_image(img, flags)
 	else:
 		image = ResourceLoader.load(total_path, "ImageTexture")
-
-	if image != null:
-		image.set_flags(flags)
+		if image != null:
+			image.set_flags(flags)
 
 	return image
 
@@ -843,7 +912,7 @@ func read_file(path):
 
 	var content = JSON.parse(file.get_as_text())
 	if content.error != OK:
-		print_error("Error parsing JSON: ", content.error_string)
+		print_error("Error parsing JSON: " + content.error_string)
 		return content.error
 
 	return content.result
@@ -868,7 +937,7 @@ func read_tileset_file(path):
 
 	var content = JSON.parse(file.get_as_text())
 	if content.error != OK:
-		print_error("Error parsing JSON: ", content.error_string)
+		print_error("Error parsing JSON: " + content.error_string)
 		return content.error
 
 	return content.result
@@ -1059,6 +1128,17 @@ func object_sorter(first, second):
 		return first.id < second.id
 	return first.y < second.y
 
+# Create the tilecount for the TileSet if not present.
+# Based on the image and tile dimensions.
+func make_tilecount(tilesize, imagesize, margin, spacing):
+	var horizontal_tile_size = int(tilesize.x + margin * 2 + spacing)
+	var vertical_tile_size = int(tilesize.y + margin * 2 + spacing)
+
+	var horizontal_tile_count = int(imagesize.x) / horizontal_tile_size;
+	var vertical_tile_count = int(imagesize.y) / vertical_tile_size;
+
+	return horizontal_tile_count * vertical_tile_count
+
 # Validates the map dictionary content for missing or invalid keys
 # Returns an error code
 func validate_map(map):
@@ -1100,9 +1180,6 @@ func validate_tileset(tileset):
 		return ERR_INVALID_DATA
 	elif not "tileheight" in tileset or not str(tileset.tileheight).is_valid_integer():
 		print_error("Missing or invalid tileheight tileset property.")
-		return ERR_INVALID_DATA
-	elif not "tilecount" in tileset or not str(tileset.tilecount).is_valid_integer():
-		print_error("Missing or invalid tilecount tileset property.")
 		return ERR_INVALID_DATA
 	if not "image" in tileset:
 		for tile in tileset.tiles:

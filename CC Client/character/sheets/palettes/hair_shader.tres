@@ -32,4 +32,3 @@ shader = SubResource( 1 )
 shader_param/palette_size = 8.0
 shader_param/palette = ExtResource( 2 )
 shader_param/mask = ExtResource( 1 )
-

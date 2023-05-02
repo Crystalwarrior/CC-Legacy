@@ -45,7 +45,6 @@ size_flags_vertical = 3
 text = "Host"
 
 [node name="Join" type="VBoxContainer" parent="."]
-editor/display_folded = true
 visible = false
 margin_top = 150.0
 margin_right = 512.0
@@ -108,7 +107,6 @@ size_flags_vertical = 0
 text = "Back"
 
 [node name="Host" type="VBoxContainer" parent="."]
-editor/display_folded = true
 visible = false
 margin_top = 150.0
 margin_right = 512.0
