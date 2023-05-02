@@ -17,8 +17,8 @@ colors = PoolColorArray( 1, 1, 1, 1 )
 
 [sub_resource type="GradientTexture2D" id=2]
 gradient = SubResource( 1 )
-width = 512
-height = 512
+width = 1024
+height = 1024
 
 [node name="Game" type="Node"]
 script = ExtResource( 1 )
