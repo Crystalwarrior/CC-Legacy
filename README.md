@@ -4,5 +4,6 @@ A legacy build of my murder mystery roleplaying project built in Godot 3.1. The 
 Feel free to add upon and expand on the project. There's no guarantees on it being functional.
 
 
-Sprites credit to Fury McFlurry
+Character Sprites credit to Fury McFlurry under the CC-BY-4.0 license https://creativecommons.org/licenses/by/4.0/
+
 Sound effects sourced from freesound.org, see CC Client/sounds/credits.txt for attribution.
