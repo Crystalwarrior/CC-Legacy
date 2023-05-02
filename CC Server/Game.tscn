@@ -22,7 +22,6 @@ current = "Tag"
 [node name="map" parent="." instance=ExtResource( 3 )]
 
 [node name="SpawnPoints" type="Node2D" parent="."]
-editor/display_folded = true
 __meta__ = {
 "_edit_lock_": true
 }
@@ -79,7 +78,6 @@ position = Vector2( 553, 620 )
 position = Vector2( 894, 623 )
 
 [node name="Players" type="YSort" parent="."]
-editor/display_folded = true
 __meta__ = {
 "_edit_lock_": true
 }
@@ -179,12 +177,9 @@ scale = Vector2( 2, 1 )
 [node name="ServerCam" type="Camera2D" parent="."]
 anchor_mode = 0
 current = true
-drag_margin_h_enabled = false
-drag_margin_v_enabled = false
 script = ExtResource( 8 )
 
 [node name="Interface" type="CanvasLayer" parent="."]
-editor/display_folded = true
 
 [node name="HUD" parent="Interface" instance=ExtResource( 9 )]
 

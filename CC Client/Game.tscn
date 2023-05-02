@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://map/test.tmx" type="PackedScene" id=2]
@@ -8,9 +8,17 @@
 [ext_resource path="res://obj/Door.tscn" type="PackedScene" id=6]
 [ext_resource path="res://obj/DoorV.tscn" type="PackedScene" id=7]
 [ext_resource path="res://FreeCam.gd" type="Script" id=8]
-[ext_resource path="res://lostest.png" type="Texture" id=9]
 [ext_resource path="res://fov.gd" type="Script" id=10]
 [ext_resource path="res://interface/HUD.tscn" type="PackedScene" id=11]
+
+[sub_resource type="Gradient" id=1]
+offsets = PoolRealArray( 1 )
+colors = PoolColorArray( 1, 1, 1, 1 )
+
+[sub_resource type="GradientTexture2D" id=2]
+gradient = SubResource( 1 )
+width = 512
+height = 512
 
 [node name="Game" type="Node"]
 script = ExtResource( 1 )
@@ -27,7 +35,6 @@ texture = ExtResource( 3 )
 centered = false
 
 [node name="SpawnPoints" type="Node2D" parent="."]
-editor/display_folded = true
 __meta__ = {
 "_edit_lock_": true
 }
@@ -84,7 +91,6 @@ position = Vector2( 553, 620 )
 position = Vector2( 894, 623 )
 
 [node name="Players" type="YSort" parent="."]
-editor/display_folded = true
 __meta__ = {
 "_edit_lock_": true
 }
@@ -182,29 +188,22 @@ position = Vector2( 256, 80 )
 scale = Vector2( 2, 1 )
 
 [node name="FreeCam" type="Camera2D" parent="."]
-drag_margin_h_enabled = false
-drag_margin_v_enabled = false
 script = ExtResource( 8 )
 
 [node name="Interface" type="CanvasLayer" parent="."]
 
 [node name="fov" type="Light2D" parent="Interface"]
-editor/display_folded = true
 show_behind_parent = true
 position = Vector2( 256, 256 )
-texture = ExtResource( 9 )
+texture = SubResource( 2 )
 mode = 3
 shadow_enabled = true
 shadow_buffer_size = 1024
 shadow_filter = 1
 script = ExtResource( 10 )
-__meta__ = {
-"_edit_lock_": true
-}
 
 [node name="Tween" type="Tween" parent="Interface/fov"]
 playback_speed = 2.0
 playback/speed = 2.0
 
 [node name="HUD" parent="Interface" instance=ExtResource( 11 )]
-

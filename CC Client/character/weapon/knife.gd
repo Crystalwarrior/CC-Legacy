@@ -13,16 +13,16 @@ var sound = null
 
 func _ready():
 	$AnimationPlayer.connect('animation_finished', self, "_on_animation_finished")
-	_change_state(IDLE)
+	_change_state(STATES.IDLE)
 	sound = get_node("Sound")
 
 func _change_state(new_state):
 	match new_state:
-		IDLE:
+		STATES.IDLE:
 			set_physics_process(false)
 			connected.clear()
 			$AnimationPlayer.play('idle')
-		ATTACK:
+		STATES.ATTACK:
 			set_physics_process(true)
 			$AnimationPlayer.play('swing')
 			if get_parent().is_network_master():
@@ -47,10 +47,10 @@ func damaged(obj):
 	sound.play()
 
 func attack():
-	_change_state(ATTACK)
+	_change_state(STATES.ATTACK)
 
 func _on_animation_finished(name):
 	if name == 'idle':
 		return
-	_change_state(IDLE)
+	_change_state(STATES.IDLE)
 	emit_signal("attack_finished")
