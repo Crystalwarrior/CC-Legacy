@@ -9,8 +9,8 @@ var data = { name = '', character = {
 	skin_color = Color()  }
 	}
 
-var _port = 0
-var _ip = ""
+var _port = 25565
+var _ip = "127.0.0.1"
 
 func _ready():
 	$Main.visible = true
@@ -35,6 +35,10 @@ func _on_Back_pressed():
 
 ##JOINING##
 func _on_JoinIP_text_changed(new_text):
+	if new_text.is_empty():
+		_port = 25565
+		_ip = "127.0.0.1"
+		return
 	var split = new_text.split(':')
 	_ip = split[0]
 	if split.size() > 1:
@@ -57,6 +61,9 @@ func _on_JoinButton_pressed():
 
 ##HOSTING##
 func _on_Port_text_changed(new_text):
+	if new_text.is_empty():
+		_port = 25565
+		return
 	_port = int(new_text)
 
 func _on_HostButton_pressed():
