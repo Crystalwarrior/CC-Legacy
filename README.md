@@ -5,4 +5,4 @@ Feel free to add upon and expand on the project. There's no guarantees on it bei
 
 
 Sprites credit to Fury McFlurry
-Sound effects are placeholders.
+Sound effects sourced from freesound.org, see CC Client/sounds/credits.txt for attribution.
