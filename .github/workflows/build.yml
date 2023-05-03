@@ -1,0 +1,62 @@
+name: Build Godot Project
+
+on:
+  push: {}
+  pull_request: {}
+
+jobs:
+  client:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+          
+      - name: Build
+        id: build
+        uses: stonedDiscord/build-godot-action@patch-1
+        with:
+          name: client
+          preset: "Windows Desktop"
+          projectDir: "CC Client"
+          debugMode: "true"
+          
+      - name: Pack EXE
+        run: |
+          mkdir -p binaries
+          cp ./build/client ./binaries/client.exe
+          cp ./build/client.pck ./binaries/client.pck
+          
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Client - Windows
+          path: ${{ github.workspace }}/binaries/
+
+  server:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+          
+      - name: Build
+        id: build
+        uses: stonedDiscord/build-godot-action@patch-1
+        with:
+          name: server
+          preset: "Windows Desktop"
+          projectDir: "CC Server"
+          debugMode: "true"
+          
+      - name: Pack EXE
+        run: |
+          mkdir -p binaries
+          cp ./build/server ./binaries/server.exe
+          cp ./build/server.pck ./binaries/server.pck
+          
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Server - Windows
+          path: ${{ github.workspace }}/binaries/
