@@ -13,7 +13,7 @@ jobs:
           lfs: true
       - name: Build
         id: build
-        uses: manleydev/build-godot-action@v1.4.1
+        uses: stonedDiscord/build-godot-action@patch-1
         with:
           name: client
           preset: ${{ matrix.platform }}
@@ -32,7 +32,7 @@ jobs:
           lfs: true
       - name: Build
         id: build
-        uses: manleydev/build-godot-action@v1.4.1
+        uses: stonedDiscord/build-godot-action@patch-1
         with:
           name: client
           preset: ${{ matrix.platform }}
