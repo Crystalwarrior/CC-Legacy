@@ -16,7 +16,7 @@ jobs:
         uses: stonedDiscord/build-godot-action@patch-1
         with:
           name: client
-          preset: ${{ matrix.platform }}
+          preset: windows
           projectDir: "CC Client"
           debugMode: "true"
       - name: Upload Artifact
@@ -35,7 +35,7 @@ jobs:
         uses: stonedDiscord/build-godot-action@patch-1
         with:
           name: client
-          preset: ${{ matrix.platform }}
+          preset: windows
           projectDir: "CC Server"
           debugMode: "true"
       - name: Upload Artifact
