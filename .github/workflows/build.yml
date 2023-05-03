@@ -21,11 +21,17 @@ jobs:
           projectDir: "CC Client"
           debugMode: "true"
           
+      - name: Pack EXE
+        run: |
+          mkdir -p binaries
+          cp ./build/client ./binaries/client.exe
+          cp ./build/client.pck ./binaries/client.pck
+          
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           name: Client - Windows
-          path: ${{ github.workspace }}/
+          path: ${{ github.workspace }}/bianries/
 
   server:
     runs-on: ubuntu-latest
@@ -42,6 +48,12 @@ jobs:
           preset: "Windows Desktop"
           projectDir: "CC Server"
           debugMode: "true"
+          
+      - name: Pack EXE
+        run: |
+          mkdir -p binaries
+          cp ./build/server ./binaries/server.exe
+          cp ./build/server.pck ./binaries/server.pck
           
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
