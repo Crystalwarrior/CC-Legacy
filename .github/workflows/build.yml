@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Client - Windows
-          path: ${{ github.workspace }}/bianries/
+          path: ${{ github.workspace }}/binaries/
 
   server:
     runs-on: ubuntu-latest
@@ -59,4 +59,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Server - Windows
-          path: ${{ github.workspace }}/
+          path: ${{ github.workspace }}/binaries/
