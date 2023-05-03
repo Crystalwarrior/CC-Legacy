@@ -11,6 +11,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           lfs: true
+          
       - name: Build
         id: build
         uses: stonedDiscord/build-godot-action@patch-1
@@ -19,17 +20,24 @@ jobs:
           preset: "Windows Desktop"
           projectDir: "CC Client"
           debugMode: "true"
+          
+      - name: Rename exe
+        run: |
+          mv ${{ github.workspace }}/${{ steps.build.outputs.build }}/client ${{ github.workspace }}/${{ steps.build.outputs.build }}/client.exe
+          
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           name: Client - Windows
           path: ${{ github.workspace }}/${{ steps.build.outputs.build }}
+
   server:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
           lfs: true
+          
       - name: Build
         id: build
         uses: stonedDiscord/build-godot-action@patch-1
@@ -38,6 +46,11 @@ jobs:
           preset: "Windows Desktop"
           projectDir: "CC Server"
           debugMode: "true"
+          
+      - name: Rename exe
+        run: |
+          mv ${{ github.workspace }}/${{ steps.build.outputs.build }}/server ${{ github.workspace }}/${{ steps.build.outputs.build }}/server.exe
+          
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
